@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Imexam</title>
+  </head>
+  <body>
+    <h1>Машнер Илья Олегович, группа 231-322</h1>
+    {% if exams %}
+    <table border="1" cellpadding="8">
+      <tr>
+        <th>Название экзамена</th>
+        <th>Опубликован</th>
+        <th>Дата проведения</th>
+        <th>Задание (картинка)</th>
+        <th>Пользователи</th>
+      </tr>
+      {% for exam in exams %}
+      <tr>
+        <td>{{ exam.name }}</td>
+        <td>{{ exam.is_public }}</td>
+        <td>{{ exam.exam_date|date:'d.m.Y' }}</td>
+        <td>
+          {% if exam.image and exam.is_public%}
+            <img src="{{ exam.image.url }}" alt="Задание" width="300" />
+          {% else %} Нет изображения {% endif %}
+        </td>
+        <td>
+          {% for user in exam.users.all %} 
+          {{user.get_full_name|default:user.username }} ({{ user.email }})<br />
+          {% empty %} Нет пользователей {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>Нет опубликованных экзаменов.</p>
+    {% endif %}
+  </body>
+</html>
